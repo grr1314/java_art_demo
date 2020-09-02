@@ -12,22 +12,22 @@ import java.util.concurrent.ConcurrentHashMap;
  * 书中是基于7将的，这里直接尝试看8中的ConcurrentHashMap源码。正式看之前带着几个问题去看
  * 问题1：ConcurrentHashMap如何实现线程安全的 问题2
  * ConcurrentHashMap如何确定大小？是否有类似于HashMap的扩容机制？ 问题3 相比于HashTable性能优越在哪里？ let's go
- *
+ * <p>
  * 一 初始化
- *
+ * <p>
  * 1 默认初始化
- *
+ * <p>
  * Creates a new, empty map with the default initial table size (16).
- *
+ * <p>
  * public ConcurrentHashMap(){
- *
+ * <p>
  * }
- *
+ * <p>
  * 很简单什么操作都没有，注释也写的很清楚，创建一个空的大小为16的table（数组）
- *
- *
+ * <p>
+ * <p>
  * 2 put方法
- *
+ * <p>
  * final V putVal(K key, V value, boolean onlyIfAbsent) { if (key == null ||
  * value == null) throw new NullPointerException(); //（1）说明key和value都不能为空 int
  * hash = spread(key.hashCode()); //（2）计算key的hash值 int binCount =
@@ -50,23 +50,16 @@ import java.util.concurrent.ConcurrentHashMap;
  * (!onlyIfAbsent) p.val = value; } } } } if (binCount != 0) { if (binCount >=
  * TREEIFY_THRESHOLD) treeifyBin(tab, i); if (oldVal != null) return oldVal;
  * break; } } } addCount(1L, binCount); return null; }
- *
+ * <p>
  * 看完put方法我们知道了ConcurrentHashMap的数据结构是和HashMap一样的，它在put的时候利用了cas和锁两种形式保证了线程安全，
  * 在出现hash冲突的时候才会使用锁去保证线程安全，相比HashTable的方式性能要提升了不少。关于问题2我们还要接着看helpTransfer 方法
- * 
- * 
+ * <p>
+ * <p>
  * 3 get get方法很简单和HashMap的get几乎是一样的，不同的地方就是需要hash两次，这个是和put方法对应的很好理解
- * 
- * 4
- *
- *
- *
- *
- *
- *
- *
- *
- *
+ * <p>
+ * 4 remove
+ * <p>
+ * remove方法内部调用了replaceNode方法
  */
 public class ConcurrentHashMapDemo {
     HashMap<String, String> hashMap = new HashMap<>();
