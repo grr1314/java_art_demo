@@ -1,4 +1,4 @@
-package section3.LockDemo;
+package cp3.LockDemo;
 
 public class Demo {
     public static void main(String[] args) {
